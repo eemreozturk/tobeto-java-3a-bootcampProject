@@ -1,5 +1,6 @@
 package com.example.bootcampProject.entities.concretes;
 
+import com.example.bootcampProject.core.entities.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

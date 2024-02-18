@@ -1,0 +1,23 @@
+package com.example.bootcampProject.business.concretes;
+
+import com.example.bootcampProject.business.abstracts.ApplicantService;
+import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
+import com.example.bootcampProject.core.entities.User;
+import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
+import com.example.bootcampProject.dataAccess.abstracts.ApplicantRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+
+@Service
+@AllArgsConstructor
+public class ApplicantManager implements ApplicantService  {
+    private ModelMapperService modelMapperService;
+    private ApplicantRepository applicantRepository;
+    @Override
+    public GetAllUserResponse getByAbout(String about) {
+        User applicant = applicantRepository.findByAbout(about);
+        GetAllUserResponse response = modelMapperService.forResponse().map(applicant,GetAllUserResponse.class);
+        return response;
+    }
+}
