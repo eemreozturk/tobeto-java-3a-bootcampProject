@@ -12,6 +12,7 @@ import com.example.bootcampProject.core.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,9 +45,11 @@ public class UserManager implements UserService{
 
     @Override
     public CreateUserResponse add(CreatUserRequest request) {
+        LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
     User user=modelMapperService.forRequest().map(request,User.class);
-        userRepository.save(user);
         user.setCreatedDate(LocalDateTime.now());
+        user.setDateOfBirth(birthDate);
+        userRepository.save(user);
         CreateUserResponse response = modelMapperService.forResponse().map(user, CreateUserResponse.class);
         return response;
     }

@@ -5,7 +5,6 @@ import com.example.bootcampProject.business.responses.create.user.CreateUserResp
 import com.example.bootcampProject.business.responses.create.user.UpdateUserRequest;
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetUserResponse;
-import com.example.bootcampProject.core.entities.User;
 
 import java.util.List;
 

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name="users")
+
 public class User {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -32,7 +33,8 @@ public class User {
     @Column(name = "email")
     private String email;
     @Column(name = "password")
-    private JPasswordField password;
+    private String password;
+
     @Column(name="createdDate")
     private LocalDateTime createdDate;
 

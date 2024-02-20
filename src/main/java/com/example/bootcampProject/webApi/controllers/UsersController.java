@@ -6,7 +6,6 @@ import com.example.bootcampProject.business.responses.create.user.CreateUserResp
 import com.example.bootcampProject.business.responses.create.user.UpdateUserRequest;
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetUserResponse;
-import com.example.bootcampProject.core.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +22,12 @@ public class UsersController {
        return userService.add(request);
 
     }
-    @GetMapping("getall")
+    @GetMapping("/getall")
     public List<GetAllUserResponse> getAll(){
         return userService.getAll();
     }
 
-@GetMapping("getbyid/{id}")
+@GetMapping("/getbyid/{id}")
     public GetUserResponse getById(@PathVariable int id){
     return userService.getById(id);
     }
