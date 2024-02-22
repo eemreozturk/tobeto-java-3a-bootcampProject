@@ -1,7 +1,7 @@
 package com.example.bootcampProject.dataAccess.abstracts;
 
 
-import com.example.bootcampProject.core.entities.User;
+import com.example.bootcampProject.entities.concretes.User;
 import com.example.bootcampProject.entities.concretes.Instructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 

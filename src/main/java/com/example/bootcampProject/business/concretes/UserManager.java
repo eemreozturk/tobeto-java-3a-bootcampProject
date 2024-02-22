@@ -3,12 +3,14 @@ package com.example.bootcampProject.business.concretes;
 import com.example.bootcampProject.business.abstracts.UserService;
 import com.example.bootcampProject.business.requests.creat.user.CreatUserRequest;
 import com.example.bootcampProject.business.responses.create.user.CreateUserResponse;
-import com.example.bootcampProject.business.responses.create.user.UpdateUserRequest;
+import com.example.bootcampProject.business.responses.create.user.UpdateUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetUserResponse;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
+import com.example.bootcampProject.core.utulities.results.DataResult;
+import com.example.bootcampProject.core.utulities.results.SuccessDataResult;
 import com.example.bootcampProject.dataAccess.abstracts.UserRepository;
-import com.example.bootcampProject.core.entities.User;
+import com.example.bootcampProject.entities.concretes.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +27,10 @@ public class UserManager implements UserService{
     private ModelMapperService modelMapperService;
 
     @Override
-    public GetAllUserResponse getByEmail(String email) {
+    public DataResult<GetAllUserResponse> getByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        GetAllUserResponse response = modelMapperService.forResponse().map(user,GetAllUserResponse.class);
-        return response;
+        GetAllUserResponse rresponse = modelMapperService.forResponse().map(user,GetAllUserResponse.class);
+        return new SuccessDataResult<GetAllUserResponse>(rresponse,"Added Successfully") ;
     }
 
     @Override
@@ -37,35 +39,35 @@ public class UserManager implements UserService{
     }
 
     @Override
-    public UpdateUserRequest update(UpdateUserRequest updateUserRequest) {
+    public UpdateUserResponse update(UpdateUserResponse updateUserRequest) {
         User user=modelMapperService.forRequest().map(updateUserRequest,User.class);
         userRepository.save(user);
         return null;
     }
 
     @Override
-    public CreateUserResponse add(CreatUserRequest request) {
+    public DataResult<CreateUserResponse> add(CreatUserRequest request) {
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
     User user=modelMapperService.forRequest().map(request,User.class);
         user.setCreatedDate(LocalDateTime.now());
         user.setDateOfBirth(birthDate);
         userRepository.save(user);
         CreateUserResponse response = modelMapperService.forResponse().map(user, CreateUserResponse.class);
-        return response;
+        return new SuccessDataResult<CreateUserResponse>(response,"Added Successfully") ;
     }
 
     @Override
-    public List<GetAllUserResponse> getAll() {
+    public DataResult<List<GetAllUserResponse>> getAll() {
         List<User> users = userRepository.findAll();
          List<GetAllUserResponse> userResponses = users.stream().map(user -> modelMapperService.forResponse().map(user, GetAllUserResponse.class)).collect(Collectors.toList());
 
-        return userResponses;
+        return new SuccessDataResult<List<GetAllUserResponse>>(userResponses,"Listed Successfully") ;
     }
 
     @Override
-    public GetUserResponse getById(int id) {
+    public DataResult<GetUserResponse> getById(int id) {
         User user = userRepository.findById(id);
         GetUserResponse response = modelMapperService.forResponse().map(user,GetUserResponse.class);
-        return response;
+        return new SuccessDataResult<GetUserResponse>(response,"Get by id Successfully");
     }
 }

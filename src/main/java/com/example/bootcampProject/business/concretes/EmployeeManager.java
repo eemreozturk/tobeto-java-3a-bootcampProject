@@ -2,7 +2,7 @@ package com.example.bootcampProject.business.concretes;
 
 import com.example.bootcampProject.business.abstracts.EmployeeService;
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
-import com.example.bootcampProject.core.entities.User;
+import com.example.bootcampProject.entities.concretes.User;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.dataAccess.abstracts.EmployeeRepository;
 import lombok.AllArgsConstructor;
