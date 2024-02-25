@@ -1,9 +1,10 @@
 package com.example.bootcampProject.business.concretes;
 
 import com.example.bootcampProject.business.abstracts.UserService;
-import com.example.bootcampProject.business.requests.creat.user.CreatUserRequest;
+import com.example.bootcampProject.business.requests.create.user.CreateUserRequest;
+import com.example.bootcampProject.business.requests.update.user.UpdateUserRequest;
 import com.example.bootcampProject.business.responses.create.user.CreateUserResponse;
-import com.example.bootcampProject.business.responses.create.user.UpdateUserResponse;
+import com.example.bootcampProject.business.responses.update.user.UpdateUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetUserResponse;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
@@ -39,14 +40,16 @@ public class UserManager implements UserService{
     }
 
     @Override
-    public UpdateUserResponse update(UpdateUserResponse updateUserRequest) {
-        User user=modelMapperService.forRequest().map(updateUserRequest,User.class);
-        userRepository.save(user);
-        return null;
+    public UpdateUserResponse update(UpdateUserRequest updateUserRequest, int id) {
+        User user = userRepository.findById(id).orElseThrow();
+        User updatedUser = modelMapperService.forRequest().map(updateUserRequest, User.class);
+        UpdateUserResponse response = modelMapperService.forResponse().map(user, UpdateUserResponse.class);
+
+        return new SuccessDataResult<UpdateUserResponse>(response, "Updated Successfully");
     }
 
     @Override
-    public DataResult<CreateUserResponse> add(CreatUserRequest request) {
+    public DataResult<CreateUserResponse> add(CreateUserRequest request) {
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
     User user=modelMapperService.forRequest().map(request,User.class);
         user.setCreatedDate(LocalDateTime.now());
@@ -55,6 +58,8 @@ public class UserManager implements UserService{
         CreateUserResponse response = modelMapperService.forResponse().map(user, CreateUserResponse.class);
         return new SuccessDataResult<CreateUserResponse>(response,"Added Successfully") ;
     }
+
+
 
     @Override
     public DataResult<List<GetAllUserResponse>> getAll() {

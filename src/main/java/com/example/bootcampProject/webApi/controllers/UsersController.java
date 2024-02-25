@@ -1,8 +1,8 @@
 package com.example.bootcampProject.webApi.controllers;
 
 import com.example.bootcampProject.business.abstracts.UserService;
-import com.example.bootcampProject.business.requests.creat.user.CreatUserRequest;
-import com.example.bootcampProject.business.responses.create.user.UpdateUserResponse;
+import com.example.bootcampProject.business.requests.create.user.CreateUserRequest;
+import com.example.bootcampProject.business.responses.update.user.UpdateUserResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ public class UsersController extends BaseController{
     private UserService userService;
 
     @PostMapping()
-    public ResponseEntity<?> add(@RequestBody CreatUserRequest request){
+    public ResponseEntity<?> add(@RequestBody CreateUserRequest request){
         return handleDataResult(userService.add(request));
     }
     @GetMapping("/getall")
