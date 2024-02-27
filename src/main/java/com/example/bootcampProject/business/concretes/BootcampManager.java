@@ -1,6 +1,7 @@
 package com.example.bootcampProject.business.concretes;
 
 import com.example.bootcampProject.business.abstracts.BootcampService;
+import com.example.bootcampProject.business.constants.BootcampMessages;
 import com.example.bootcampProject.business.requests.create.bootcamp.CreateBootcampRequest;
 import com.example.bootcampProject.business.requests.update.bootcamp.UpdateBootcampRequest;
 import com.example.bootcampProject.business.responses.create.bootcamp.CreateBootcampResponse;
@@ -9,14 +10,20 @@ import com.example.bootcampProject.business.responses.create.user.CreateUserResp
 import com.example.bootcampProject.business.responses.get.bootcamp.GetAllBootcampResponse;
 import com.example.bootcampProject.business.responses.get.bootcamp.GetBootcampResponse;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
 import com.example.bootcampProject.core.utulities.results.SuccessDataResult;
+import com.example.bootcampProject.core.utulities.results.SuccessResult;
 import com.example.bootcampProject.dataAccess.abstracts.BootcampRepository;
 import com.example.bootcampProject.entities.concretes.Bootcamp;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +37,7 @@ public class BootcampManager implements BootcampService {
     public DataResult<GetBootcampResponse> getById(int id) {
         Bootcamp bootcamp = bootcampRepository.findById(id);
         GetAllBootcampResponse response = modelMapperService.forResponse().map(bootcamp,GetAllBootcampResponse.class);
-        return new SuccessDataResult<GetAllBootcampResponse>(response,"Listed Successfully") ;
+        return new SuccessDataResult<GetAllBootcampResponse>(response, BootcampMessages.BootcampGetById) ;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class BootcampManager implements BootcampService {
         List<Bootcamp> bootcamps = bootcampRepository.findAll();
         List<GetAllBootcampResponse> bootcampResponses = bootcamps.stream().map(bootcamp -> modelMapperService.forResponse().map(bootcamp, GetAllBootcampResponse.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<GetAllBootcampResponse>>(bootcampResponses,"Listed Successfully") ;
+        return new SuccessDataResult<List<GetAllBootcampResponse>>(bootcampResponses,BootcampMessages.BootcampListed) ;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class BootcampManager implements BootcampService {
         bootcampRepository.save(bootcamp);
         CreateUserResponse response = modelMapperService.forResponse().map(bootcamp, CreateBootcampResponse.class);
 
-        return new SuccessDataResult<CreateBootcampResponse>(response, "Added Successfully");
+        return new SuccessDataResult<CreateBootcampResponse>(response, BootcampMessages.BootcampAdded);
     }
 
     @Override
@@ -56,12 +63,24 @@ public class BootcampManager implements BootcampService {
         Bootcamp updatedBootcamp = modelMapperService.forRequest().map(updateBootcampRequest, Bootcamp.class);
         UpdateBootcampResponse response = modelMapperService.forResponse().map(bootcamp, UpdateBootcampResponse.class);
 
-        return new SuccessDataResult<UpdateBootcampResponse>(response, "Updated Successfully");
+        return new SuccessDataResult<UpdateBootcampResponse>(response, BootcampMessages.BootcampUpdated);
     }
 
     @Override
     public Result delete(int id) {
-        this.bootcampRepository.deleteById(id);
+        Bootcamp bootcamp= bootcampRepository.getById(id);
+        bootcampRepository.delete(bootcamp);
+        return new SuccessResult(BootcampMessages.BootcampDeleted);
     }
+    @Override
+    public DataResult<List<GetAllBootcampResponse>> getAllPage(PageDto pageDto) {
+        Sort sort=Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()),pageDto.getSortBy());
+        Pageable pageable = PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
+        Page<Bootcamp> bootcamps= BootcampRepository.findAll(pageable);
+        List<GetAllBootcampResponse> responses=bootcamps.stream().map(bootcamp -> modelMapperService.forResponse().map(bootcamp,GetAllBootcampResponse.class)).toList();
+
+        return new SuccessDataResult<List<GetAllBootcampResponse>>(responses) ;
+    }
+
 }
-}
+

@@ -5,6 +5,7 @@ import com.example.bootcampProject.business.responses.create.application.CreateA
 import com.example.bootcampProject.business.responses.update.application.UpdateApplicationResponse;
 import com.example.bootcampProject.business.responses.get.application.GetAllApplicationResponse;
 import com.example.bootcampProject.business.responses.get.application.GetApplicationResponse;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
 
@@ -16,4 +17,5 @@ public interface ApplicationService {
     DataResult<UpdateApplicationResponse> update(UpdateApplicationResponse updateApplicationResponse, int id);
     Result delete(int id);
     DataResult<List<GetAllApplicationResponse>> getAll();
+    DataResult<List<GetAllApplicationResponse>> getAllPage(PageDto pageDto);
 }

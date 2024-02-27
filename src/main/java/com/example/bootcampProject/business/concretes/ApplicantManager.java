@@ -1,13 +1,16 @@
 package com.example.bootcampProject.business.concretes;
 
 import com.example.bootcampProject.business.abstracts.ApplicantService;
-import com.example.bootcampProject.business.requests.create.user.CreateUserRequest;
+import com.example.bootcampProject.business.constants.ApplicantMessages;
+import com.example.bootcampProject.business.requests.create.applicant.CreateApplicantRequest;
 import com.example.bootcampProject.business.requests.update.applicant.UpdateApplicantRequest;
 import com.example.bootcampProject.business.responses.create.applicant.CreateApplicantResponse;
-import com.example.bootcampProject.business.responses.create.user.CreateUserResponse;
 import com.example.bootcampProject.business.responses.get.applicant.GetAllApplicantResponse;
 import com.example.bootcampProject.business.responses.update.applicant.UpdateApplicantResponse;
+import com.example.bootcampProject.core.exceptions.types.BusinessException;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.Result;
+import com.example.bootcampProject.core.utulities.results.SuccessResult;
 import com.example.bootcampProject.entities.concretes.Applicant;
 import com.example.bootcampProject.entities.concretes.User;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
@@ -15,8 +18,12 @@ import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.SuccessDataResult;
 import com.example.bootcampProject.dataAccess.abstracts.ApplicantRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ApplicantManager implements ApplicantService  {
+public class ApplicantManager implements ApplicantService {
     private ModelMapperService modelMapperService;
     private ApplicantRepository applicantRepository;
 
@@ -37,35 +44,37 @@ public class ApplicantManager implements ApplicantService  {
         Applicant updatedApplicant = modelMapperService.forRequest().map(updateApplicantRequest, Applicant.class);
         UpdateApplicantResponse response = modelMapperService.forResponse().map(applicant, UpdateApplicantResponse.class);
 
-        return new SuccessDataResult<UpdateApplicantResponse>(response, "Updated Successfully");
+        return new SuccessDataResult<UpdateApplicantResponse>(response, ApplicantMessages.ApplicantUpdated);
 
     }
 
     @Override
     public Result delete(int id) {
-        this.applicantRepository.deleteById(id);
+        Applicant applicant = ApplicantRepository.getById(id);
+        ApplicantRepository.delete(applicant);
+        return new SuccessResult(ApplicantMessages.ApplicantDeleted);
     }
 
 
     @Override
     public DataResult<GetAllApplicantResponse> getByAbout(String about) {
         User applicant = applicantRepository.findByAbout(about);
-        GetAllApplicantResponse response = modelMapperService.forResponse().map(applicant,GetAllApplicantResponse.class);
-        return new SuccessDataResult<GetAllApplicantResponse>(response,"Added Successfully") ;
+        GetAllApplicantResponse response = modelMapperService.forResponse().map(applicant, GetAllApplicantResponse.class);
+        return new SuccessDataResult<GetAllApplicantResponse>(response, ApplicantMessages.ApplicantGetByAbout);
     }
 
     @Override
-    public DataResult<CreateUserResponse> add(CreateUserRequest request) {
-        LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
+    public DataResult<CreateApplicantResponse> add(CreateApplicantRequest request) {
+        checkIfAboutExists(request.getAbout());
+        LocalDate birthDate = LocalDate.parse(request.getDateOfBirth());
         Applicant applicant = modelMapperService.forRequest().map(request, Applicant.class);
         applicant.setCreatedDate(LocalDateTime.now());
         applicant.setDateOfBirth(birthDate);
         applicantRepository.save(applicant);
         CreateApplicantResponse response = modelMapperService.forResponse().map(applicant, CreateApplicantResponse.class);
 
-        return new SuccessDataResult<CreateApplicantResponse>(response, "Added Successfully");
+        return new SuccessDataResult<CreateApplicantResponse>(response, ApplicantMessages.ApplicantAdded);
     }
-
 
 
     @Override
@@ -73,7 +82,25 @@ public class ApplicantManager implements ApplicantService  {
         List<Applicant> users = applicantRepository.findAll();
         List<GetAllApplicantResponse> userResponses = users.stream().map(applicant -> modelMapperService.forResponse().map(applicant, GetAllApplicantResponse.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<GetAllApplicantResponse>>(userResponses,"Listed Successfully") ;
+        return new SuccessDataResult<List<GetAllApplicantResponse>>(userResponses, ApplicantMessages.ApplicantListed);
     }
 
+    @Override
+    public DataResult<List<GetAllApplicantResponse>> getAllPage(PageDto pageDto) {
+        Sort sort = Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()), pageDto.getSortBy());
+        Pageable pageable = PageRequest.of(pageDto.getPageNumber(), pageDto.getPageSize(), sort);
+        Page<Applicant> applicants = applicantRepository.findAll(pageable);
+        List<GetAllApplicantResponse> responses = applicants.stream().map(X -> modelMapperService.forResponse().map(X, GetAllApplicantResponse.class)).toList();
+
+        return new SuccessDataResult<List<GetAllApplicantResponse>>(responses);
+    }
+
+    @Override
+    public void checkIfAboutExists(String about) {
+        Applicant applicant = applicantRepository.getByAbout(about.trim());
+        if (applicant != null) {
+            throw new BusinessException("About is used!");
+        }
+
+    }
 }

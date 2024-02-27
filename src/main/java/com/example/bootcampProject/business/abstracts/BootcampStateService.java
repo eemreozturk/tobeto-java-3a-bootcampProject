@@ -5,6 +5,7 @@ import com.example.bootcampProject.business.requests.update.bootcampState.Update
 import com.example.bootcampProject.business.responses.create.bootcampState.CreateBootcampStateResponse;
 import com.example.bootcampProject.business.responses.get.bootcampState.GetAllBootcampStateResponse;
 import com.example.bootcampProject.business.responses.update.bootcampState.UpdateBootcampStateResponse;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
 
@@ -17,4 +18,5 @@ public interface BootcampStateService {
     DataResult<CreateBootcampStateResponse> add(CreateBootcampStateRequest request);
     DataResult<UpdateBootcampStateResponse> update(UpdateBootcampStateRequest updateBootcampStateResponse, int id);
     Result delete(int id);
+    DataResult<List<GetAllBootcampStateResponse>> getAllPage(PageDto pageDto);
 }

@@ -5,6 +5,7 @@ import com.example.bootcampProject.business.responses.create.user.CreateUserResp
 import com.example.bootcampProject.business.responses.update.user.UpdateUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetUserResponse;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
 
@@ -18,5 +19,6 @@ public interface UserService {
     DataResult<GetUserResponse> getById(int id);
 
     DataResult<GetAllUserResponse> getByEmail(String email) ;
+    DataResult<List<GetAllUserResponse>> getAllPage(PageDto pageDto);
 
 }

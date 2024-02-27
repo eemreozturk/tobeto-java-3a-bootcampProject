@@ -5,6 +5,7 @@ import com.example.bootcampProject.business.requests.update.applicationState.Upd
 import com.example.bootcampProject.business.responses.create.applicationState.CreateApplicationStateResponse;
 import com.example.bootcampProject.business.responses.get.applicationState.GetAllApplicationStateResponse;
 import com.example.bootcampProject.business.responses.update.applicationState.UpdateApplicationStateResponse;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
 
@@ -17,4 +18,5 @@ public interface ApplicationStateService {
     DataResult<CreateApplicationStateResponse> add(CreateApplicationStateRequest request);
     DataResult<UpdateApplicationStateResponse> update(UpdateApplicationStateRequest updateApplicationStateResponse, int id);
     Result delete(int id);
+    DataResult<List<GetAllApplicationStateResponse>> getAllPage(PageDto pageDto);
 }
