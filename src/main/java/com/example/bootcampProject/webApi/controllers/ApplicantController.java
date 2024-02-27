@@ -3,6 +3,7 @@ package com.example.bootcampProject.webApi.controllers;
 import com.example.bootcampProject.business.abstracts.ApplicantService;
 import com.example.bootcampProject.business.requests.create.applicant.CreateApplicantRequest;
 import com.example.bootcampProject.business.requests.update.applicant.UpdateApplicantRequest;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +31,17 @@ public class ApplicantController extends BaseController{
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        return handleDataResult(applicantService.delete(id));
+        return handleResult(applicantService.delete(id));
     }
 
     @PutMapping("update/{id}")
     public ResponseEntity<?> update(@RequestBody UpdateApplicantRequest request, @PathVariable int id) {
         return handleDataResult(applicantService.update(request, id));
     }
-
+    @GetMapping("sort")
+    public  ResponseEntity<?> getAllPage(@RequestBody PageDto pageDto){
+        return handleDataResult(applicantService.getAllPage(pageDto));
+    }
 
 
 }

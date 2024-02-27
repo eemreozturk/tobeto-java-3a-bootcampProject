@@ -3,6 +3,7 @@ package com.example.bootcampProject.webApi.controllers;
 import com.example.bootcampProject.business.abstracts.UserService;
 import com.example.bootcampProject.business.requests.create.user.CreateUserRequest;
 import com.example.bootcampProject.business.responses.update.user.UpdateUserResponse;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,13 @@ public class UsersController extends BaseController{
         this.userService.update(updateUserRequest);
 }
 @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id){
-        this.userService.delete(id);
+    public ResponseEntity<?> delete(@PathVariable int id){
+       return  handleResult(userService.delete(id));
 }
+
+    @GetMapping("sort")
+    public  ResponseEntity<?> getAllPage(@RequestBody PageDto pageDto){
+        return handleDataResult(userService.getAllPage(pageDto));
+    }
 
 }

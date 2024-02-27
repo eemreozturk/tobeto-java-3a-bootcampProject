@@ -5,6 +5,7 @@ import com.example.bootcampProject.business.requests.create.applicant.CreateAppl
 import com.example.bootcampProject.business.requests.create.employee.CreateEmployeeRequest;
 import com.example.bootcampProject.business.requests.update.applicant.UpdateApplicantRequest;
 import com.example.bootcampProject.business.requests.update.employee.UpdateEmployeeRequest;
+import com.example.bootcampProject.core.utulities.paging.PageDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +33,17 @@ public class EmployeeController extends BaseController{
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        return handleDataResult(employeeService.delete(id));
+        return handleResult(employeeService.delete(id));
     }
 
     @PutMapping("update/{id}")
     public ResponseEntity<?> update(@RequestBody UpdateEmployeeRequest request, @PathVariable int id) {
         return handleDataResult(employeeService.update(request, id));
+    }
+
+    @GetMapping("sort")
+    public  ResponseEntity<?> getAllPage(@RequestBody PageDto pageDto){
+        return handleDataResult(employeeService.getAllPage(pageDto));
     }
 
 }
