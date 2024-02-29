@@ -49,8 +49,8 @@ public class UserManager implements UserService{
         return new SuccessResult(UserMessages.UserDeleted);
     }
     @Override
-    public UpdateUserResponse update(UpdateUserRequest updateUserRequest, int id) {
-        User user = userRepository.findById(id).orElseThrow();
+    public DataResult<UpdateUserResponse> update(UpdateUserRequest updateUserRequest, int id) {
+        User user = userRepository.findById(id);
         User updatedUser = modelMapperService.forRequest().map(updateUserRequest, User.class);
         UpdateUserResponse response = modelMapperService.forResponse().map(user, UpdateUserResponse.class);
 
@@ -89,8 +89,8 @@ public class UserManager implements UserService{
     @Override
     public DataResult<List<GetAllUserResponse>> getAllPage(PageDto pageDto) {
         Sort sort=Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()),pageDto.getSortBy());
-        Pageable pageable = PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
-        Page<User> users= userRepository.findAll(pageable);
+        Pageable pageable = (Pageable) PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
+        Page<User> users= userRepository.findAll((org.springframework.data.domain.Pageable) pageable);
         List<GetAllUserResponse> responses=users.stream().map(user -> modelMapperService.forResponse().map(user,GetAllUserResponse.class)).toList();
 
         return new SuccessDataResult<List<GetAllUserResponse>>(responses) ;

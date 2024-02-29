@@ -57,7 +57,7 @@ public class BootcampStateManager implements BootcampStateService {
 
     @Override
     public DataResult<UpdateBootcampStateResponse> update(UpdateBootcampStateRequest updateBootcampStateRequest, int id) {
-        BootcampState bootcampState = bootcampStateRepository.findById(id).orElseThrow();
+        BootcampState bootcampState = bootcampStateRepository.findById(id);
         BootcampState updatedBootcampState = modelMapperService.forRequest().map(updateBootcampStateRequest, BootcampState.class);
         UpdateBootcampStateResponse response = modelMapperService.forResponse().map(bootcampState, UpdateBootcampStateResponse.class);
 
@@ -73,8 +73,8 @@ public class BootcampStateManager implements BootcampStateService {
     @Override
     public DataResult<List<GetAllBootcampStateResponse>> getAllPage(PageDto pageDto) {
         Sort sort=Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()),pageDto.getSortBy());
-        Pageable pageable = PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
-        Page<BootcampState> bootcampStates= bootcampStateRepository.findAll(pageable);
+        Pageable pageable = (Pageable) PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
+        Page<BootcampState> bootcampStates= bootcampStateRepository.findAll((org.springframework.data.domain.Pageable) pageable);
         List<GetAllBootcampStateResponse> responses=bootcampStates.stream().map(bootcampState -> modelMapperService.forResponse().map(bootcampState,GetAllBootcampStateResponse.class)).toList();
 
         return new SuccessDataResult<List<GetAllBootcampStateResponse>>(responses) ;

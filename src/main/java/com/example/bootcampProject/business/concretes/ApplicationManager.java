@@ -3,18 +3,16 @@ package com.example.bootcampProject.business.concretes;
 import com.example.bootcampProject.business.abstracts.ApplicationService;
 import com.example.bootcampProject.business.constants.ApplicationMessages;
 import com.example.bootcampProject.business.requests.create.application.CreateApplicationRequest;
+import com.example.bootcampProject.business.requests.update.application.UpdateApplicationRequest;
 import com.example.bootcampProject.business.responses.create.application.CreateApplicationResponse;
 import com.example.bootcampProject.business.responses.update.application.UpdateApplicationResponse;
-import com.example.bootcampProject.business.responses.create.user.CreateUserResponse;
 import com.example.bootcampProject.business.responses.get.application.GetAllApplicationResponse;
-import com.example.bootcampProject.business.responses.get.application.GetApplicationResponse;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
 import com.example.bootcampProject.core.utulities.results.SuccessDataResult;
 import com.example.bootcampProject.core.utulities.results.SuccessResult;
-import com.example.bootcampProject.dataAccess.abstracts.ApplicantRepository;
 import com.example.bootcampProject.dataAccess.abstracts.ApplicationRepository;
 import com.example.bootcampProject.entities.concretes.Application;
 import lombok.AllArgsConstructor;
@@ -33,7 +31,7 @@ public class ApplicationManager implements ApplicationService {
     private ModelMapperService modelMapperService;
     private ApplicationRepository applicationRepository;
     @Override
-    public DataResult<GetApplicationResponse> getById(int id) {
+    public SuccessDataResult<GetAllApplicationResponse> getById(int id) {
         Application application = applicationRepository.findById(id);
         GetAllApplicationResponse response = modelMapperService.forResponse().map(application,GetAllApplicationResponse.class);
         return new SuccessDataResult<GetAllApplicationResponse>(response, ApplicationMessages.ApplicationGetById) ;
@@ -43,24 +41,24 @@ public class ApplicationManager implements ApplicationService {
     public DataResult<CreateApplicationResponse> add(CreateApplicationRequest request) {
         Application application = modelMapperService.forRequest().map(request, Application.class);
         applicationRepository.save(application);
-        CreateUserResponse response = modelMapperService.forResponse().map(application, CreateApplicationResponse.class);
+        CreateApplicationResponse response = modelMapperService.forResponse().map(application, CreateApplicationResponse.class);
 
         return new SuccessDataResult<CreateApplicationResponse>(response, ApplicationMessages.ApplicationAdded);
     }
 
     @Override
-    public DataResult<UpdateApplicationResponse> update(UpdateApplicationResponse updateApplicationResponse, int id) {
+    public DataResult<UpdateApplicationResponse> update(UpdateApplicationRequest applicationRequest, int id) {
 
-        Application application = applicationRepository.findById(id).orElseThrow();
-        Application updatedApplication = modelMapperService.forRequest().map(updateApplicationResponse, Application.class);
+        Application application = applicationRepository.findById(id);
+        Application updatedApplication = modelMapperService.forRequest().map(applicationRequest, Application.class);
         UpdateApplicationResponse response = modelMapperService.forResponse().map(application, UpdateApplicationResponse.class);
 
         return new SuccessDataResult<UpdateApplicationResponse>(response, ApplicationMessages.ApplicationUpdated);
     }
     @Override
     public Result delete(int id) {
-        Application application = ApplicantRepository.getById(id);
-        ApplicantRepository.delete(application);
+        Application application = applicationRepository.getById(id);
+       applicationRepository.delete(application);
         return new SuccessResult(ApplicationMessages.ApplicationDeleted);
     }
     @Override
@@ -74,8 +72,8 @@ public class ApplicationManager implements ApplicationService {
     @Override
     public DataResult<List<GetAllApplicationResponse>> getAllPage(PageDto pageDto) {
         Sort sort=Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()),pageDto.getSortBy());
-        Pageable pageable = PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
-        Page<Application> applications= ApplicantRepository.findAll(pageable);
+        Pageable pageable = (Pageable) PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
+        Page<Application> applications= applicationRepository.findAll((org.springframework.data.domain.Pageable) pageable);
         List<GetAllApplicationResponse> responses=applications.stream().map(application -> modelMapperService.forResponse().map(application,GetAllApplicationResponse.class)).toList();
 
         return new SuccessDataResult<List<GetAllApplicationResponse>>(responses) ;

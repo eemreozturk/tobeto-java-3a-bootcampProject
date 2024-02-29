@@ -39,7 +39,7 @@ public class InstructorManager implements InstructorService {
     public DataResult<GetAllInstructorResponse> getByCompanyName(String companyName) {
         User instructor = instructorRepository.findByCompanyName(companyName);
         GetAllInstructorResponse response = modelMapperService.forResponse().map(instructor,GetAllInstructorResponse.class);
-        return new SuccessDataResult<CreateInstructorResponse>(response,InstructorMessages.InstructorGetByCompanyName);
+        return new SuccessDataResult<GetAllInstructorResponse>(response,InstructorMessages.InstructorGetByCompanyName);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class InstructorManager implements InstructorService {
     public DataResult<UpdateInstructorResponse> update(UpdateInstructorRequest updateInstructorRequest, int id) {
 
         Instructor instructor = instructorRepository.findById(id).orElseThrow();
-        Instructor instructor = modelMapperService.forRequest().map(updateInstructorRequest, Instructor.class);
+        Instructor updatedInstructor = modelMapperService.forRequest().map(updateInstructorRequest, Instructor.class);
         UpdateInstructorResponse response = modelMapperService.forResponse().map(instructor, UpdateInstructorResponse.class);
 
         return new SuccessDataResult<UpdateInstructorResponse>(response, InstructorMessages.InstructorUpdated);
@@ -81,8 +81,8 @@ public class InstructorManager implements InstructorService {
     @Override
     public DataResult<List<GetAllInstructorResponse>> getAllPage(PageDto pageDto) {
         Sort sort=Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()),pageDto.getSortBy());
-        Pageable pageable = PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
-        Page<Instructor> instructors= instructorRepository.findAll(pageable);
+        Pageable pageable = (Pageable) PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
+        Page<Instructor> instructors= instructorRepository.findAll((org.springframework.data.domain.Pageable) pageable);
         List<GetAllInstructorResponse> responses=instructors.stream().map(instructor -> modelMapperService.forResponse().map(instructor,GetAllInstructorResponse.class)).toList();
 
         return new SuccessDataResult<List<GetAllInstructorResponse>>(responses) ;

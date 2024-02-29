@@ -5,15 +5,15 @@ import com.example.bootcampProject.business.requests.update.bootcamp.UpdateBootc
 import com.example.bootcampProject.business.responses.create.bootcamp.CreateBootcampResponse;
 import com.example.bootcampProject.business.responses.update.bootcamp.UpdateBootcampResponse;
 import com.example.bootcampProject.business.responses.get.bootcamp.GetAllBootcampResponse;
-import com.example.bootcampProject.business.responses.get.bootcamp.GetBootcampResponse;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
+import com.example.bootcampProject.core.utulities.results.SuccessDataResult;
 
 import java.util.List;
 
 public interface BootcampService {
-    DataResult<GetBootcampResponse> getById(int id);
+    SuccessDataResult<GetAllBootcampResponse> getById(int id);
     DataResult<List<GetAllBootcampResponse>> getAll();
 
     DataResult<CreateBootcampResponse> add(CreateBootcampRequest request);

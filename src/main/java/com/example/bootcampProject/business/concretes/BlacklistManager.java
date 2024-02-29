@@ -50,7 +50,7 @@ public class BlacklistManager implements BlacklistService {
 
     @Override
     public DataResult<UpdateBlacklistResponse> update(UpdateBlacklistRequest updateBlacklistRequest, int id) {
-        Blacklist blacklist = blacklistRepository.findById(id).orElseThrow();
+        Blacklist blacklist = blacklistRepository.findById(id);
         Blacklist updateBlacklist = modelMapperService.forRequest().map(updateBlacklistRequest, Blacklist.class);
         UpdateBlacklistResponse response = modelMapperService.forResponse().map(blacklist, UpdateBlacklistResponse.class);
 
@@ -75,8 +75,8 @@ public class BlacklistManager implements BlacklistService {
     @Override
     public DataResult<List<GetAllBlacklistResponse>> getAllPage(PageDto pageDto) {
         Sort sort=Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()),pageDto.getSortBy());
-        Pageable pageable = PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
-        Page<Blacklist> blacklists= blacklistRepository.findAll(pageable);
+        Pageable pageable = (Pageable) PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
+        Page<Blacklist> blacklists= blacklistRepository.findAll((org.springframework.data.domain.Pageable) pageable);
         List<GetAllBlacklistResponse> responses=blacklists.stream().map(blacklist -> modelMapperService.forResponse().map(blacklist,GetAllBlacklistResponse.class)).toList();
 
         return new SuccessDataResult<List<GetAllBlacklistResponse>>(responses) ;

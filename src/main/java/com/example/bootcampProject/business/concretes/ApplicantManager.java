@@ -50,8 +50,8 @@ public class ApplicantManager implements ApplicantService {
 
     @Override
     public Result delete(int id) {
-        Applicant applicant = ApplicantRepository.getById(id);
-        ApplicantRepository.delete(applicant);
+        Applicant applicant = applicantRepository.getById(id);
+        applicantRepository.delete(applicant);
         return new SuccessResult(ApplicantMessages.ApplicantDeleted);
     }
 
@@ -88,8 +88,8 @@ public class ApplicantManager implements ApplicantService {
     @Override
     public DataResult<List<GetAllApplicantResponse>> getAllPage(PageDto pageDto) {
         Sort sort = Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()), pageDto.getSortBy());
-        Pageable pageable = PageRequest.of(pageDto.getPageNumber(), pageDto.getPageSize(), sort);
-        Page<Applicant> applicants = applicantRepository.findAll(pageable);
+        Pageable pageable = (Pageable) PageRequest.of(pageDto.getPageNumber(), pageDto.getPageSize(), sort);
+        Page<Applicant> applicants = applicantRepository.findAll((org.springframework.data.domain.Pageable) pageable);
         List<GetAllApplicantResponse> responses = applicants.stream().map(X -> modelMapperService.forResponse().map(X, GetAllApplicantResponse.class)).toList();
 
         return new SuccessDataResult<List<GetAllApplicantResponse>>(responses);

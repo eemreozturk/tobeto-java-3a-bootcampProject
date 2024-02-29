@@ -14,7 +14,6 @@ import com.example.bootcampProject.core.utulities.results.Result;
 import com.example.bootcampProject.core.utulities.results.SuccessDataResult;
 import com.example.bootcampProject.core.utulities.results.SuccessResult;
 import com.example.bootcampProject.entities.concretes.Employee;
-import com.example.bootcampProject.entities.concretes.User;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.dataAccess.abstracts.EmployeeRepository;
 import lombok.AllArgsConstructor;
@@ -36,9 +35,9 @@ public class EmployeeManager implements EmployeeService {
     private EmployeeRepository employeeRepository;
     @Override
     public DataResult<GetAllEmployeeResponse> getByPosition(String position) {
-        User employee = employeeRepository.findByPosition(position);
+        Employee employee = employeeRepository.findByPosition(position);
         GetAllEmployeeResponse response = modelMapperService.forResponse().map(employee,GetAllEmployeeResponse.class);
-        return new SuccessDataResult<CreateEmployeeResponse>(response, EmployeeMessages.EmployeeGetByPosition);
+        return new SuccessDataResult<GetAllEmployeeResponse>(response, EmployeeMessages.EmployeeGetByPosition);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class EmployeeManager implements EmployeeService {
         Employee employee = modelMapperService.forRequest().map(request, Employee.class);
         employee.setCreatedDate(LocalDateTime.now());
         employee.setDateOfBirth(birthDate);
-        EmployeeRepository.save(employee);
+        employeeRepository.save(employee);
         CreateEmployeeResponse response = modelMapperService.forResponse().map(employee, CreateEmployeeResponse.class);
 
         return new SuccessDataResult<CreateEmployeeResponse>(response, EmployeeMessages.EmployeeAdded);
@@ -59,7 +58,7 @@ public class EmployeeManager implements EmployeeService {
 
 
         Employee employee = employeeRepository.findById(id).orElseThrow();
-        Employee employee = modelMapperService.forRequest().map(updateEmployeeRequest, Employee.class);
+        Employee updatedEmployee = modelMapperService.forRequest().map(updateEmployeeRequest, Employee.class);
         UpdateEmployeeResponse response = modelMapperService.forResponse().map(employee, UpdateEmployeeResponse.class);
 
         return new SuccessDataResult<UpdateEmployeeResponse>(response, EmployeeMessages.EmployeeUpdated);
@@ -82,8 +81,8 @@ public class EmployeeManager implements EmployeeService {
     @Override
     public DataResult<List<GetAllEmployeeResponse>> getAllPage(PageDto pageDto) {
         Sort sort=Sort.by(Sort.Direction.fromString(pageDto.getSortDirection()),pageDto.getSortBy());
-        Pageable pageable = PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
-        Page<Employee> employees= employeeRepository.findAll(pageable);
+        Pageable pageable = (Pageable) PageRequest.of(pageDto.getPageNumber(),pageDto.getPageSize(),sort);
+        Page<Employee> employees= employeeRepository.findAll((org.springframework.data.domain.Pageable) pageable);
         List<GetAllEmployeeResponse> responses=employees.stream().map(employee -> modelMapperService.forResponse().map(employee,GetAllEmployeeResponse.class)).toList();
 
         return new SuccessDataResult<List<GetAllEmployeeResponse>>(responses) ;
