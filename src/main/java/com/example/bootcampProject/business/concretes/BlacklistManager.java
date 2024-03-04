@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.blacklist.CreateBla
 import com.example.bootcampProject.business.responses.get.blacklist.GetAllBlacklistResponse;
 import com.example.bootcampProject.business.responses.get.blacklist.GetBlacklistResponse;
 import com.example.bootcampProject.business.responses.update.blacklist.UpdateBlacklistResponse;
+import com.example.bootcampProject.business.rules.BlacklistBusinessRules;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.*;
@@ -30,6 +31,7 @@ public class BlacklistManager implements BlacklistService {
 
     private ModelMapperService modelMapperService;
     private BlacklistRepository blacklistRepository;
+    private BlacklistBusinessRules blacklistBusinessRules;
 
     @Override
     public DataResult<GetBlacklistResponse> getById(int id) {
@@ -40,6 +42,7 @@ public class BlacklistManager implements BlacklistService {
 
     @Override
     public DataResult<CreateBlacklistResponse> add(CreateBlacklistRequest request) {
+        blacklistBusinessRules.checkIfReasonExists(request.getReason());
         Blacklist blacklist = modelMapperService.forRequest().map(request, Blacklist.class);
         blacklist.setCreatedDate(LocalDateTime.now());
         blacklistRepository.save(blacklist);

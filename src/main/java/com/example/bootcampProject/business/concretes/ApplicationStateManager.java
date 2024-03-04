@@ -7,6 +7,7 @@ import com.example.bootcampProject.business.requests.update.applicationState.Upd
 import com.example.bootcampProject.business.responses.create.applicationState.CreateApplicationStateResponse;
 import com.example.bootcampProject.business.responses.get.applicationState.GetAllApplicationStateResponse;
 import com.example.bootcampProject.business.responses.update.applicationState.UpdateApplicationStateResponse;
+import com.example.bootcampProject.business.rules.ApplicationStateBusinessRules;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -29,6 +30,7 @@ import java.util.List;
 public class ApplicationStateManager implements ApplicationStateService {
     private ModelMapperService modelMapperService;
     private ApplicationStateRepository applicationStateRepository;
+    private ApplicationStateBusinessRules applicationStateBusinessRules;
     @Override
     public DataResult<GetAllApplicationStateResponse> getById(int id) {
         ApplicationState applicationState = applicationStateRepository.findById(id);
@@ -46,6 +48,7 @@ public class ApplicationStateManager implements ApplicationStateService {
 
     @Override
     public DataResult<CreateApplicationStateResponse> add(CreateApplicationStateRequest request) {
+        applicationStateBusinessRules.checkIfIdExists(request.getId());
         ApplicationState applicationState = modelMapperService.forRequest().map(request, ApplicationState.class);
         applicationStateRepository.save(applicationState);
         CreateApplicationStateResponse response = modelMapperService.forResponse().map(applicationState, CreateApplicationStateResponse.class);

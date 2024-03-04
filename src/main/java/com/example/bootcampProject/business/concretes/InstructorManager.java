@@ -7,6 +7,7 @@ import com.example.bootcampProject.business.requests.update.instructor.UpdateIns
 import com.example.bootcampProject.business.responses.create.instructor.CreateInstructorResponse;
 import com.example.bootcampProject.business.responses.get.instructor.GetAllInstructorResponse;
 import com.example.bootcampProject.business.responses.update.instructor.UpdateInstructorResponse;
+import com.example.bootcampProject.business.rules.InstructorBusinessRules;
 import com.example.bootcampProject.core.exceptions.types.BusinessException;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 public class InstructorManager implements InstructorService {
     private InstructorRepository instructorRepository;
     private ModelMapperService modelMapperService;
+    private InstructorBusinessRules instructorBusinessRules;
     @Override
     public DataResult<GetAllInstructorResponse> getByCompanyName(String companyName) {
         User instructor = instructorRepository.findByCompanyName(companyName);
@@ -44,7 +46,7 @@ public class InstructorManager implements InstructorService {
 
     @Override
     public DataResult<CreateInstructorResponse> add(CreateInstructorRequest request) {
-        checkIfCompanyNameExists(request.getCompanyName());
+        instructorBusinessRules.checkIfCompanyNameExists(request.getCompanyName());
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
         Instructor instructor = modelMapperService.forRequest().map(request, Instructor.class);
         instructor.setCreatedDate(LocalDateTime.now());
@@ -90,10 +92,7 @@ public class InstructorManager implements InstructorService {
 
     @Override
     public void checkIfCompanyNameExists(String companyName) {
-        Instructor instructor = instructorRepository.getByCompanyName(companyName.trim());
-        if (instructor != null) {
-            throw new BusinessException("Company Name is used!");
-        }
+
 
     }
 

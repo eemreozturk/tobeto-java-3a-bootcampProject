@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.bootcamp.CreateBoot
 import com.example.bootcampProject.business.responses.update.bootcamp.UpdateBootcampResponse;
 import com.example.bootcampProject.business.responses.create.user.CreateUserResponse;
 import com.example.bootcampProject.business.responses.get.bootcamp.GetAllBootcampResponse;
+import com.example.bootcampProject.business.rules.BootcampBusinessRules;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 public class BootcampManager implements BootcampService {
     private ModelMapperService modelMapperService;
     private BootcampRepository bootcampRepository;
+    private BootcampBusinessRules bootcampBusinessRules;
 
     @Override
     public SuccessDataResult<GetAllBootcampResponse> getById(int id) {
@@ -49,6 +51,7 @@ public class BootcampManager implements BootcampService {
 
     @Override
     public DataResult<CreateBootcampResponse> add(CreateBootcampRequest request) {
+        bootcampBusinessRules.checkIfNameExists(request.getName());
         Bootcamp bootcamp = modelMapperService.forRequest().map(request, Bootcamp.class);
         bootcampRepository.save(bootcamp);
         CreateBootcampResponse response = modelMapperService.forResponse().map(bootcamp, CreateBootcampResponse.class);

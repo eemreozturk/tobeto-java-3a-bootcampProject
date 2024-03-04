@@ -7,6 +7,7 @@ import com.example.bootcampProject.business.requests.update.applicant.UpdateAppl
 import com.example.bootcampProject.business.responses.create.applicant.CreateApplicantResponse;
 import com.example.bootcampProject.business.responses.get.applicant.GetAllApplicantResponse;
 import com.example.bootcampProject.business.responses.update.applicant.UpdateApplicantResponse;
+import com.example.bootcampProject.business.rules.ApplicantBusinessRules;
 import com.example.bootcampProject.core.exceptions.types.BusinessException;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.Result;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 public class ApplicantManager implements ApplicantService {
     private ModelMapperService modelMapperService;
     private ApplicantRepository applicantRepository;
+    private ApplicantBusinessRules applicantBusinessRules;
 
 
     @Override
@@ -65,7 +67,7 @@ public class ApplicantManager implements ApplicantService {
 
     @Override
     public DataResult<CreateApplicantResponse> add(CreateApplicantRequest request) {
-        checkIfAboutExists(request.getAbout());
+        applicantBusinessRules.checkIfAboutExists(request.getAbout());
         LocalDate birthDate = LocalDate.parse(request.getDateOfBirth());
         Applicant applicant = modelMapperService.forRequest().map(request, Applicant.class);
         applicant.setCreatedDate(LocalDateTime.now());
@@ -97,10 +99,8 @@ public class ApplicantManager implements ApplicantService {
 
     @Override
     public void checkIfAboutExists(String about) {
-        Applicant applicant = applicantRepository.getByAbout(about.trim());
-        if (applicant != null) {
-            throw new BusinessException("About is used!");
-        }
 
     }
+
+
 }

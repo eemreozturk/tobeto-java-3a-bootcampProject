@@ -8,7 +8,7 @@ import com.example.bootcampProject.business.responses.create.user.CreateUserResp
 import com.example.bootcampProject.business.responses.update.user.UpdateUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetUserResponse;
-import com.example.bootcampProject.core.exceptions.types.BusinessException;
+import com.example.bootcampProject.business.rules.UserBusinessRules;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 public class UserManager implements UserService{
     private UserRepository userRepository;
     private ModelMapperService modelMapperService;
+    private UserBusinessRules userBusinessRules;
 
     @Override
     public DataResult<GetAllUserResponse> getByEmail(String email) {
@@ -59,7 +60,7 @@ public class UserManager implements UserService{
 
     @Override
     public DataResult<CreateUserResponse> add(CreateUserRequest request) {
-        checkIfEmailExists(request.getEmail());
+        userBusinessRules.checkIfEmailExists(request.getEmail());
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
     User user=modelMapperService.forRequest().map(request,User.class);
         user.setCreatedDate(LocalDateTime.now());
@@ -98,10 +99,7 @@ public class UserManager implements UserService{
 
     @Override
     public void checkIfEmailExists(String email) {
-        User user = userRepository.getByEmail(email.trim());
-        if(user != null){
-            throw new BusinessException("Email is used!");
-        }
+
     }
 
 }

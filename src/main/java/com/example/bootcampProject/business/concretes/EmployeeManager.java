@@ -7,7 +7,7 @@ import com.example.bootcampProject.business.requests.update.employee.UpdateEmplo
 import com.example.bootcampProject.business.responses.create.employee.CreateEmployeeResponse;
 import com.example.bootcampProject.business.responses.get.employee.GetAllEmployeeResponse;
 import com.example.bootcampProject.business.responses.update.employee.UpdateEmployeeResponse;
-import com.example.bootcampProject.core.exceptions.types.BusinessException;
+import com.example.bootcampProject.business.rules.EmployeeBusinessRules;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 public class EmployeeManager implements EmployeeService {
     private ModelMapperService modelMapperService;
     private EmployeeRepository employeeRepository;
+    private EmployeeBusinessRules employeeBusinessRules;
     @Override
     public DataResult<GetAllEmployeeResponse> getByPosition(String position) {
         Employee employee = employeeRepository.findByPosition(position);
@@ -42,7 +43,7 @@ public class EmployeeManager implements EmployeeService {
 
     @Override
     public DataResult<CreateEmployeeResponse> add(CreateEmployeeRequest request) {
-        checkIfPositionExists(request.getPosition());
+        employeeBusinessRules.checkIfPositionExists(request.getPosition());
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
         Employee employee = modelMapperService.forRequest().map(request, Employee.class);
         employee.setCreatedDate(LocalDateTime.now());
@@ -89,10 +90,7 @@ public class EmployeeManager implements EmployeeService {
     }
     @Override
     public void checkIfPositionExists(String position) {
-        Employee employee = employeeRepository.getByPosition(position.trim());
-        if (employee != null) {
-            throw new BusinessException("Position is used!");
-        }
+
 
     }
 
