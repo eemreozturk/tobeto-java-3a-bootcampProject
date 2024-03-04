@@ -1,0 +1,55 @@
+@EqualsAndHashCode
+Bu anotasyon, sınıf seviyesinde hem equals() hem de hashCode() metotlarını oluşturmaktadır. ToString anotasyonunda olduğu gibi parametrelerle sınıf alanlarını dahil veya hariç yapabilirsiniz.
+
+@PrimaryKeyJoinColumn
+Kalıtan sınıftaki belirtilen sütun ile ata sınıftaki primary key alanı join yapılır. Böylece kalıtan sınıf ata sınıftan ilave alanlar elde edebilir.
+Yani ata sınıf primary key üretir bu değer kalıtan sınıfa foreign key olarak yazılır ve normalde aynı isimli sütunların olması beklenir.
+
+@MappedSuperClass
+Bu classları genellikle ortak state ve mapping bilgisi olan entitylerimiz olduğunda kullanırız.
+
+@Inheritance
+Kalıtım, bir sınıftan(üst sınıf/super class) başka bir sınıfa miras bırakılandır.
+
+Exception nedir?
+Exception uygulama çalışırken meydana gelen hatalardır. Bu hataların bir kısmı tolere edilebilirken bir kısmı ise uygulamanın tamamen durmasına neden olur.Amacımız bu hataları yakalamak ve mümkünse tolere edip uygulamanın çalışmaya devam etmesini sağlamaktır, tabi hatanın meydana gelmesini önlemek çok daha öncelikli hedefimiz.
+Java bizlere kullanılması kolay ve esnek bir hata yakalama mekanizması sunuyor. Javada tüm hatalar sınıflar tarafından temsil edilir, yani bir hata oluştuğunda bir hata objesi oluşturulur. Java dilinde tüm hataların atası Throwable sınıfıdır. Throwable sınıfının iki tane doğrudan alt sınıfı bulunur, Exception ve Error. Error sınıfı doğrudan bizim kodumuzla ilgili olmayan JVM ile ilgili hatalar için kullanılır ve bu hatalar kontrolümüz dışındadır. Exception sınıfı ise doğrudan yazdığımız kodla ilgili bizim kontrolümüzde olan hatalar için kullanılır.
+
+NoSql nedir ?
+NoSQL veri tabanları, belirli veri modelleri için özel olarak tasarlanmıştır ve modern uygulamalar için kolayca ölçeklenebilen esnek şemalarla veri depolar. NoSQL veri tabanları uygun ölçekte geliştirme kolaylığı, işlevselliği ve performansıyla geniş çapta kabul görmüştür. Bu sayfa, NoSQL veri tabanlarını daha iyi anlamanıza ve kullanmaya başlamanıza yardımcı olacak kaynaklar içermektedir.
+
+rdbms ile farkı nedir ?
+SQL veritabanları, iyi tanımlanmış ilişkilere sahip yapılandırılmış verileri işlemede üstünlük sağlarken, NoSQL veritabanları, veri öğelerinin biçim ve yapı bakımından farklılık gösterebileceği yapılandırılmamış veya yarı yapılandırılmış verileri işlemek için özel olarak tasarlanmıştır.
+Veri Modeli
+SQL veritabanları, verileri satır ve sütunlardan oluşan tablolar halinde düzenleyen, önceden tanımlanmış şemalara sahip yapılandırılmış bir veri modeli kullanır.
+NoSQL veritabanları, yapılandırılmamış veya yarı yapılandırılmış verileri barındıran esnek bir veri modelini benimser.
+Ölçeklenebilirlik
+SQL veritabanları genellikle dikey olarak ölçeklenebilir, yani tek bir sunucuya daha fazla kaynak ekleyerek artan yükleri kaldırabilirler.
+NoSQL veritabanları yatay olarak ölçeklenebilir şekilde tasarlanmıştır ve bu sayede verilerin birden fazla sunucu veya kümeye dağıtılmasını sağlar. Bu yaklaşım, veri hacimleri ve kullanıcı talepleri arttıkça sorunsuz ölçeklenebilirlik sağlar.
+Query Dili
+SQL veritabanları, verileri sorgulamak ve işlemek için yapılandırılmış sorgu dilini (SQL) kullanır.
+NoSQL veritabanları genellikle veri erişimi için kendi sorgu dillerine veya arayüzlerine sahiptir. 
+Şema Esnekliği
+SQL veritabanları, önceden tanımlanmış tablo yapıları ve veri türleri gerektiren katı şemalar uygular. Şemada yapılan değişiklikler genellikle tüm veritabanının değiştirilmesini gerektirir ve kesinti süresi gerektirebilir.
+NoSQL veritabanları şema esnekliği sunarak dinamik ve gelişen veri yapılarına izin verir. Veriler önceden tanımlanmış şemalar olmadan eklenebilir, bu da geliştirmede daha fazla çeviklik sağlar ve değişen veri gereksinimlerini karşılar.
+Destek
+Kapsamlı destek kaynaklarına sahip yerleşik ekosistem.
+Destek kaynakları nispeten daha az kapsamlı olabilir.
+
+Aop nedir ?
+AOP, yazılımın karmaşıklığını azaltmaya, modülariteyi artırmaya yarayan bir yaklaşım biçimidir. Buradaki modülariteden kasıt uygulama süresince sistemin birçok bölümünde kullanılan, fonksiyonel olmayan kodun yani kesişen ilgilerin ufak ufak parçalara ayrılmasıdır (Seperation of Cross Cutting Concerns). Bu sayede uygulama genelinde kullanılacak olan yapıları, sistemden soyutlamış olup enkapsüle de ederek birçok yerde kullanılmasını sağlar. Genel olarak AOP bir sorunu çözmektense var olan sistemin daha güzel bir hale getirilmesini de sağlamaya yardımcı olur denilebilir.
+
+logging
+Spring Boot uygulamalarında uygulama içindeki bilgilerin, eylemlerin ve olayların kaydedilmesi açısından hayati bir rol oynar. Ayrıca bir uygulamanın performansını izlemek, uygulamanın davranışını anlamak ve uygulama içindeki sorunları tanımak için de kullanılır.logger.trace("Log level: TRACE"); 
+        logger.trace("Log level: TRACE"); 
+        logger.info("Log level: INFO"); 
+        logger.debug("Log level: DEBUG"); 
+        logger.error("Log level: ERROR"); 
+        logger.warn("Log level: WARN")
+caching
+Önbellek, uygulamamızın performansını artırmak için kullandığımız tekniklerden biridir.veri tabanına bir sorgu atıyoruz. Gelen verileri ilk olarak önbelleğe yazıyoruz. Daha sonra kullanıcıya gösteriyoruz. Eğer kullanıcı daha sonra aynı sorguyu çalıştırırsa veri tabanına gitmek yerine verileri önbellekten sunar. 
+@Cacheable(“cacheName”) 
+@CacheEvict(“cacheName”)
+@CachePut(“cacheName”) 
+transactional
+Transaction işlemi bir veya birden fazla sorguların(SQL) aynı süreçte işlem görmesidir.Bu sayede eğer istenmeyen bir durum oluştuğunda bütün bu süreci geri alabiliriz(rollback), yada hepsi aynı anda onaylayabiliriz.
