@@ -1,6 +1,6 @@
 package com.example.bootcampProject.entities.concretes;
 
-import com.example.bootcampProject.core.entities.UserBaseEntity;
+import com.example.bootcampProject.core.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name="users")
 
-public class User extends UserBaseEntity {
+public class User extends BaseEntity<Integer> {
 
     @Column(name = "userName")
     private String userName;

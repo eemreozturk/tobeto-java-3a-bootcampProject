@@ -4,6 +4,7 @@ import com.example.bootcampProject.business.abstracts.BootcampStateService;
 import com.example.bootcampProject.business.requests.create.bootcampState.CreateBootcampStateRequest;
 import com.example.bootcampProject.business.requests.update.bootcampState.UpdateBootcampStateRequest;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class BootcampStateController extends BaseController{
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody CreateBootcampStateRequest bootcampStateRequest) {
+    public ResponseEntity<?> add(@RequestBody @Valid CreateBootcampStateRequest bootcampStateRequest) {
         return handleDataResult(bootcampStateService.add(bootcampStateRequest));
     }
 
@@ -35,7 +36,7 @@ public class BootcampStateController extends BaseController{
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@RequestBody UpdateBootcampStateRequest request, @PathVariable int id) {
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateBootcampStateRequest request, @PathVariable int id) {
         return handleDataResult(bootcampStateService.update(request, id));
     }
 

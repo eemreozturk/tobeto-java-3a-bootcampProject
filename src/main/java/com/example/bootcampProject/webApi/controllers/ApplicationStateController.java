@@ -4,6 +4,7 @@ import com.example.bootcampProject.business.abstracts.ApplicationStateService;
 import com.example.bootcampProject.business.requests.create.applicationState.CreateApplicationStateRequest;
 import com.example.bootcampProject.business.requests.update.applicationState.UpdateApplicationStateRequest;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ApplicationStateController extends BaseController{
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody CreateApplicationStateRequest applicationStateRequest) {
+    public ResponseEntity<?> add(@RequestBody @Valid CreateApplicationStateRequest applicationStateRequest) {
         return handleDataResult(applicationStateService.add(applicationStateRequest));
     }
 
@@ -31,11 +32,11 @@ public class ApplicationStateController extends BaseController{
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        return handleDataResult(applicationStateService.delete(id));
+        return handleResult(applicationStateService.delete(id));
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@RequestBody UpdateApplicationStateRequest request, @PathVariable int id) {
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateApplicationStateRequest request, @PathVariable int id) {
         return handleDataResult(applicationStateService.update(request, id));
     }
 

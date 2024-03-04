@@ -6,6 +6,7 @@ import com.example.bootcampProject.business.requests.create.employee.CreateEmplo
 import com.example.bootcampProject.business.requests.update.applicant.UpdateApplicantRequest;
 import com.example.bootcampProject.business.requests.update.employee.UpdateEmployeeRequest;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class EmployeeController extends BaseController{
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody CreateEmployeeRequest employeeRequest) {
+    public ResponseEntity<?> add(@RequestBody @Valid CreateEmployeeRequest employeeRequest) {
         return handleDataResult(employeeService.add(employeeRequest));
     }
 
@@ -37,7 +38,7 @@ public class EmployeeController extends BaseController{
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@RequestBody UpdateEmployeeRequest request, @PathVariable int id) {
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateEmployeeRequest request, @PathVariable int id) {
         return handleDataResult(employeeService.update(request, id));
     }
 

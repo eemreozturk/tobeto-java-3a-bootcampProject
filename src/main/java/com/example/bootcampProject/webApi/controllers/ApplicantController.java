@@ -4,6 +4,7 @@ import com.example.bootcampProject.business.abstracts.ApplicantService;
 import com.example.bootcampProject.business.requests.create.applicant.CreateApplicantRequest;
 import com.example.bootcampProject.business.requests.update.applicant.UpdateApplicantRequest;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ApplicantController extends BaseController{
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody CreateApplicantRequest applicantRequest) {
+    public ResponseEntity<?> add(@RequestBody @Valid CreateApplicantRequest applicantRequest) {
         return handleDataResult(applicantService.add(applicantRequest));
     }
 
@@ -35,7 +36,7 @@ public class ApplicantController extends BaseController{
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@RequestBody UpdateApplicantRequest request, @PathVariable int id) {
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateApplicantRequest request, @PathVariable int id) {
         return handleDataResult(applicantService.update(request, id));
     }
     @GetMapping("sort")

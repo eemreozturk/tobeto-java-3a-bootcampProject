@@ -1,5 +1,6 @@
 package com.example.bootcampProject.entities.concretes;
 
+import com.example.bootcampProject.core.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +14,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name="blacklist")
-public class Blacklist {
+@PrimaryKeyJoinColumn(name = "id")
+public class Blacklist extends BaseEntity<Integer> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+
 
     @Column(name = "reason")
     private String reason;
@@ -30,14 +29,7 @@ public class Blacklist {
     @JoinColumn(name = "applicantId")
     private Applicant applicantId;
 
-    @Column(name="createdDate")
-    private LocalDateTime createdDate;
 
-    @Column(name="updatedDate")
-    private LocalDateTime updatedDate;
-
-    @Column(name="deletedDate")
-    private LocalDateTime deletedDate;
 
 
 }

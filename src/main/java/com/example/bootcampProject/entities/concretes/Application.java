@@ -1,9 +1,10 @@
 package com.example.bootcampProject.entities.concretes;
 
-import com.example.bootcampProject.core.entities.ApplicationBaseEntitiy;
+import com.example.bootcampProject.core.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -11,19 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="application")
-public class Application extends ApplicationBaseEntitiy {
+@EqualsAndHashCode(callSuper = true)
+public class Application extends BaseEntity<Integer> {
     //applicant_id,bootcamp_id,applicationState_id
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="ApplicantId")
     private Applicant applicant;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="BootcampId")
     private Bootcamp bootcamp;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="ApplicationStateId")
     private ApplicationState applicationState;
+
 
 }

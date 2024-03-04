@@ -8,6 +8,7 @@ import java.awt.print.Pageable;
 
 public interface BlacklistRepository extends JpaRepository<Blacklist,Integer> {
     Blacklist findById(int id);
+    Blacklist findByReason(String reason);
 
 
 }

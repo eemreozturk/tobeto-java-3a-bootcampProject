@@ -2,8 +2,9 @@ package com.example.bootcampProject.webApi.controllers;
 
 import com.example.bootcampProject.business.abstracts.ApplicationService;
 import com.example.bootcampProject.business.requests.create.application.CreateApplicationRequest;
-import com.example.bootcampProject.business.requests.update.applicationState.UpdateApplicationStateRequest;
+import com.example.bootcampProject.business.requests.update.application.UpdateApplicationRequest;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ApplicationController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody CreateApplicationRequest applicationRequest) {
+    public ResponseEntity<?> add(@RequestBody @Valid CreateApplicationRequest applicationRequest) {
         return handleDataResult(applicationService.add(applicationRequest));
     }
 
@@ -35,7 +36,7 @@ public class ApplicationController extends BaseController {
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@RequestBody UpdateApplicationStateRequest request, @PathVariable int id) {
+    public ResponseEntity<?> update(@RequestBody @Valid UpdateApplicationRequest request, @PathVariable int id) {
         return handleDataResult(applicationService.update(request, id));
     }
 

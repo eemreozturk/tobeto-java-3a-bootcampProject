@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BootcampStateRepository extends JpaRepository<BootcampState,Integer> {
     BootcampState findById(int id);
+    BootcampState findByName(String name);
 }
