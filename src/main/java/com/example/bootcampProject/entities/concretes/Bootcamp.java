@@ -23,6 +23,9 @@ public class Bootcamp extends BaseEntity<Integer> {
     @JoinColumn(name="InstructorId")
     private Instructor instructor;
 
+    @Column(name = "Name")
+    private String name;
+
     @ManyToOne
     @JoinColumn(name="BootcampStateId")
     private BootcampState bootcampState;
