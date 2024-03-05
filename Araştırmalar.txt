@@ -53,3 +53,30 @@ caching
 @CachePut(“cacheName”) 
 transactional
 Transaction işlemi bir veya birden fazla sorguların(SQL) aynı süreçte işlem görmesidir.Bu sayede eğer istenmeyen bir durum oluştuğunda bütün bu süreci geri alabiliriz(rollback), yada hepsi aynı anda onaylayabiliriz.
+
+Docker Nedir?
+Docker en net tanımlamayla open source bir ‘container’ teknolojisidir. Docker, aynı işletim sistemi üzerinde, 
+yüzlerce hatta binlerce birbirinden izole ve bağımsız containerlar sayesinde sanallaştırma sağlayan bir teknolojidir. 
+Web uygulamalarımızın kolayca kurulumunu, testini, çalışmasını ve deploymentını sağlar. Bunun yanında sunucu 
+maliyetlerini önemli ölçüde azaltır.
+
+#Docker saniyeler içerisinde başlar, çünkü içerisinde barındırdığı her bir container sadece birer processtir. 
+Böylece karşımıza lightweight bir yapı karşımıza çıkar. Bu da bizi sanal makinelerin hantallığından kurtarmış oluyor.
+#Daha hızlı deployment süreci: İşte bence en önemli avantajı diyebilirim docker için. Dockerı kullanmak için yeni bir 
+environment kurmaya gerek yoktur. Farklı sunucularda çalışmak isteyen developerlar sadece docker imageleri indirip 
+o sunucuda imageleri çalıştırmaları yeterlidir. Böylece ‘benim makinemde çalışıyordu, sunucuda neden çalışmıyor!’ 
+gibi sorunlardan da kurtulmuş oluruz :)
+#Daha Kolay Yönetim ve Ölçeklendirme: Bir sanal makineye göre docker üzerindeki containerleri çok daha kolay bir 
+şekilde çalıştırabiliriz veya istediğimiz zaman yok edebiliriz. Containerleri manage etmek için farklı toollar mevcut.
+ En çok ta Orchestrator diye nitelendirdiğimiz Kubernetes teknolojisi daha popüler olarak kullanılıyor. Kubernetes, 
+kısaca container kullanan uygulamaların dağıtımını, ölçeklendirmesini ve yönetilmesini otomatik hale getiren açık 
+kaynak kodlu bir sistem. Kubernetes mimarisini ve çalışma sistemini detaylı olarak öğrenmek isterseniz sizin için 
+çok faydalı olacağını düşündüğüm bir linki bırakıyorum: https://www.mshowto.org/kubernetes-nedir.html
+#Daha İyi Kaynak Kullanımı Sanal makinelere göre tek bir sunucu üzerindeki kaynak tüketimi dockerda çok daha verimlidir.
+Daha az kaynak tüketimi ile daha fazla containeri çalıştırabiliriz.
+#Deployment Verimliliği: Dockerın en güzel yanlarında birisi de şu: Siz localinizde test ettiniz, uygulamanızı Test 
+veya Live ortamınıza attınız. (veya daha çeşitli ortamlar (dev, staging, pre-prod vs..) Localde çalıştırdığınız 
+her şey burada da aynı şekilde çalışacak. Container ve Imagelerin tutulduğu dockerfile’ları da Git üzerinde tutmanız 
+işinizi daha da kolaylaştıracağından eminim.
+#Farklı İşletim Sistemlerine Destek Vermesi Docker Windows, Linux, MacOs gibi farklı işletim sistemlerine destek verir.
+#Popüler Cloud Servislerle Entegre Edilebilir. Docker , AWS, Microsoft Azure, Ansible, Kubernetes, Istio ve daha fazla tool ve cloud hizmetlerle entegre şekilde çalışabilir.
