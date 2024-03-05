@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.applicationState.Cr
 import com.example.bootcampProject.business.responses.get.applicationState.GetAllApplicationStateResponse;
 import com.example.bootcampProject.business.responses.update.applicationState.UpdateApplicationStateResponse;
 import com.example.bootcampProject.business.rules.ApplicationStateBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -39,6 +40,7 @@ public class ApplicationStateManager implements ApplicationStateService {
     }
 
     @Override
+    @Loggable
     public DataResult<List<GetAllApplicationStateResponse>> getAll() {
         List<ApplicationState> applicationStates = applicationStateRepository.findAll();
         List<GetAllApplicationStateResponse> applicationStateResponses = applicationStates.stream().map(applicationState -> modelMapperService.forResponse().map(applicationState, GetAllApplicationStateResponse.class)).toList();
@@ -47,6 +49,7 @@ public class ApplicationStateManager implements ApplicationStateService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateApplicationStateResponse> add(CreateApplicationStateRequest request) {
         applicationStateBusinessRules.checkIfIdExists(request.getId());
         ApplicationState applicationState = modelMapperService.forRequest().map(request, ApplicationState.class);
@@ -57,6 +60,7 @@ public class ApplicationStateManager implements ApplicationStateService {
     }
 
     @Override
+    @Loggable
     public DataResult<UpdateApplicationStateResponse> update(UpdateApplicationStateRequest updateApplicationStateRequest, int id) {
         ApplicationState applicationState = applicationStateRepository.findById(id);
         ApplicationState updatedApplicationState = modelMapperService.forRequest().map(updateApplicationStateRequest, ApplicationState.class);
@@ -66,6 +70,7 @@ public class ApplicationStateManager implements ApplicationStateService {
     }
 
     @Override
+    @Loggable
     public Result delete(int id) {
         ApplicationState applicationState= applicationStateRepository.getById(id);
         applicationStateRepository.delete(applicationState);

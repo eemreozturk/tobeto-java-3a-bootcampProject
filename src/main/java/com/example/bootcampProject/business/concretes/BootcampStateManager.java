@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.bootcampState.Creat
 import com.example.bootcampProject.business.responses.get.bootcampState.GetAllBootcampStateResponse;
 import com.example.bootcampProject.business.responses.update.bootcampState.UpdateBootcampStateResponse;
 import com.example.bootcampProject.business.rules.BootcampStateBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -41,6 +42,7 @@ public class BootcampStateManager implements BootcampStateService {
     }
 
     @Override
+    @Loggable
     public DataResult<List<GetAllBootcampStateResponse>> getAll() {
         List<BootcampState> bootcampStates = bootcampStateRepository.findAll();
         List<GetAllBootcampStateResponse> bootcampStateResponses = bootcampStates.stream().map(bootcampState -> modelMapperService.forResponse().map(bootcampState, GetAllBootcampStateResponse.class)).collect(Collectors.toList());
@@ -49,6 +51,7 @@ public class BootcampStateManager implements BootcampStateService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateBootcampStateResponse> add(CreateBootcampStateRequest request) {
         bootcampStateBusinessRules.checkIfNameExists(request.getName());
         BootcampState bootcampState = modelMapperService.forRequest().map(request, BootcampState.class);
@@ -59,6 +62,7 @@ public class BootcampStateManager implements BootcampStateService {
     }
 
     @Override
+    @Loggable
     public DataResult<UpdateBootcampStateResponse> update(UpdateBootcampStateRequest updateBootcampStateRequest, int id) {
         BootcampState bootcampState = bootcampStateRepository.findById(id);
         BootcampState updatedBootcampState = modelMapperService.forRequest().map(updateBootcampStateRequest, BootcampState.class);
@@ -68,6 +72,7 @@ public class BootcampStateManager implements BootcampStateService {
     }
 
     @Override
+    @Loggable
     public Result delete(int id) {
         BootcampState bootcampState= bootcampStateRepository.getById(id);
         bootcampStateRepository.delete(bootcampState);

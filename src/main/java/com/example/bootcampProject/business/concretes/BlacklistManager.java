@@ -9,6 +9,7 @@ import com.example.bootcampProject.business.responses.get.blacklist.GetAllBlackl
 import com.example.bootcampProject.business.responses.get.blacklist.GetBlacklistResponse;
 import com.example.bootcampProject.business.responses.update.blacklist.UpdateBlacklistResponse;
 import com.example.bootcampProject.business.rules.BlacklistBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.*;
@@ -41,6 +42,7 @@ public class BlacklistManager implements BlacklistService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateBlacklistResponse> add(CreateBlacklistRequest request) {
         blacklistBusinessRules.checkIfReasonExists(request.getReason());
         Blacklist blacklist = modelMapperService.forRequest().map(request, Blacklist.class);
@@ -52,6 +54,7 @@ public class BlacklistManager implements BlacklistService {
     }
 
     @Override
+    @Loggable
     public DataResult<UpdateBlacklistResponse> update(UpdateBlacklistRequest updateBlacklistRequest, int id) {
         Blacklist blacklist = blacklistRepository.findById(id);
         Blacklist updateBlacklist = modelMapperService.forRequest().map(updateBlacklistRequest, Blacklist.class);
@@ -61,6 +64,7 @@ public class BlacklistManager implements BlacklistService {
     }
 
     @Override
+    @Loggable
     public Result delete(int id) {
         Blacklist blacklist = blacklistRepository.getById(id);
         blacklistRepository.delete(blacklist);
@@ -68,6 +72,7 @@ public class BlacklistManager implements BlacklistService {
     }
 
     @Override
+    @Loggable
     public DataResult<List<GetAllBlacklistResponse>> getAll() {
         List<Blacklist> blacklists = blacklistRepository.findAll();
         List<GetAllBlacklistResponse> blacklistResponses = blacklists.stream().map(blacklist -> modelMapperService.forResponse().map(blacklist, GetAllBlacklistResponse.class)).collect(Collectors.toList());

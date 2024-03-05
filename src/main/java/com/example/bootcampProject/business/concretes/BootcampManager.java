@@ -9,6 +9,7 @@ import com.example.bootcampProject.business.responses.update.bootcamp.UpdateBoot
 import com.example.bootcampProject.business.responses.create.user.CreateUserResponse;
 import com.example.bootcampProject.business.responses.get.bootcamp.GetAllBootcampResponse;
 import com.example.bootcampProject.business.rules.BootcampBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -42,6 +43,7 @@ public class BootcampManager implements BootcampService {
     }
 
     @Override
+    @Loggable
     public DataResult<List<GetAllBootcampResponse>> getAll() {
         List<Bootcamp> bootcamps = bootcampRepository.findAll();
         List<GetAllBootcampResponse> bootcampResponses = bootcamps.stream().map(bootcamp -> modelMapperService.forResponse().map(bootcamp, GetAllBootcampResponse.class)).collect(Collectors.toList());
@@ -50,6 +52,7 @@ public class BootcampManager implements BootcampService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateBootcampResponse> add(CreateBootcampRequest request) {
         bootcampBusinessRules.checkIfNameExists(request.getName());
         Bootcamp bootcamp = modelMapperService.forRequest().map(request, Bootcamp.class);
@@ -60,6 +63,7 @@ public class BootcampManager implements BootcampService {
     }
 
     @Override
+    @Loggable
     public DataResult<UpdateBootcampResponse> update(UpdateBootcampRequest updateBootcampRequest, int id) {
         Bootcamp bootcamp = bootcampRepository.findById(id);
         Bootcamp updatedBootcamp = modelMapperService.forRequest().map(updateBootcampRequest, Bootcamp.class);
@@ -69,6 +73,7 @@ public class BootcampManager implements BootcampService {
     }
 
     @Override
+    @Loggable
     public Result delete(int id) {
         Bootcamp bootcamp= bootcampRepository.getById(id);
         bootcampRepository.delete(bootcamp);

@@ -9,6 +9,7 @@ import com.example.bootcampProject.business.responses.update.user.UpdateUserResp
 import com.example.bootcampProject.business.responses.get.user.GetAllUserResponse;
 import com.example.bootcampProject.business.responses.get.user.GetUserResponse;
 import com.example.bootcampProject.business.rules.UserBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -44,12 +45,14 @@ public class UserManager implements UserService{
         return new SuccessDataResult<GetAllUserResponse>(rresponse, UserMessages.UserGetByEmail) ;
     }
     @Override
+    @Loggable
     public Result delete(int id) {
         User user= userRepository.getById(id);
         userRepository.delete(user);
         return new SuccessResult(UserMessages.UserDeleted);
     }
     @Override
+    @Loggable
     public DataResult<UpdateUserResponse> update(UpdateUserRequest updateUserRequest, int id) {
         User user = userRepository.findById(id);
         User updatedUser = modelMapperService.forRequest().map(updateUserRequest, User.class);
@@ -59,6 +62,7 @@ public class UserManager implements UserService{
     }
 
     @Override
+    @Loggable
     public DataResult<CreateUserResponse> add(CreateUserRequest request) {
         userBusinessRules.checkIfEmailExists(request.getEmail());
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
@@ -73,6 +77,7 @@ public class UserManager implements UserService{
 
 
     @Override
+    @Loggable
     public DataResult<List<GetAllUserResponse>> getAll() {
         List<User> users = userRepository.findAll();
          List<GetAllUserResponse> userResponses = users.stream().map(user -> modelMapperService.forResponse().map(user, GetAllUserResponse.class)).collect(Collectors.toList());

@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.applicant.CreateApp
 import com.example.bootcampProject.business.responses.get.applicant.GetAllApplicantResponse;
 import com.example.bootcampProject.business.responses.update.applicant.UpdateApplicantResponse;
 import com.example.bootcampProject.business.rules.ApplicantBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.exceptions.types.BusinessException;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.Result;
@@ -40,6 +41,7 @@ public class ApplicantManager implements ApplicantService {
 
 
     @Override
+    @Loggable
     public DataResult<UpdateApplicantResponse> update(UpdateApplicantRequest updateApplicantRequest, int id) {
 
         Applicant applicant = applicantRepository.findById(id).orElseThrow();
@@ -51,6 +53,7 @@ public class ApplicantManager implements ApplicantService {
     }
 
     @Override
+    @Loggable
     public Result delete(int id) {
         Applicant applicant = applicantRepository.getById(id);
         applicantRepository.delete(applicant);
@@ -66,6 +69,7 @@ public class ApplicantManager implements ApplicantService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateApplicantResponse> add(CreateApplicantRequest request) {
         applicantBusinessRules.checkIfAboutExists(request.getAbout());
         LocalDate birthDate = LocalDate.parse(request.getDateOfBirth());
@@ -80,6 +84,7 @@ public class ApplicantManager implements ApplicantService {
 
 
     @Override
+    @Loggable
     public DataResult<List<GetAllApplicantResponse>> getAll() {
         List<Applicant> users = applicantRepository.findAll();
         List<GetAllApplicantResponse> userResponses = users.stream().map(applicant -> modelMapperService.forResponse().map(applicant, GetAllApplicantResponse.class)).collect(Collectors.toList());

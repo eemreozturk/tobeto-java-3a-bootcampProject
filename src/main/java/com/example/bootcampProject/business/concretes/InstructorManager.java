@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.instructor.CreateIn
 import com.example.bootcampProject.business.responses.get.instructor.GetAllInstructorResponse;
 import com.example.bootcampProject.business.responses.update.instructor.UpdateInstructorResponse;
 import com.example.bootcampProject.business.rules.InstructorBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.exceptions.types.BusinessException;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -45,6 +46,7 @@ public class InstructorManager implements InstructorService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateInstructorResponse> add(CreateInstructorRequest request) {
         instructorBusinessRules.checkIfCompanyNameExists(request.getCompanyName());
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
@@ -58,6 +60,7 @@ public class InstructorManager implements InstructorService {
     }
 
     @Override
+    @Loggable
     public DataResult<UpdateInstructorResponse> update(UpdateInstructorRequest updateInstructorRequest, int id) {
 
         Instructor instructor = instructorRepository.findById(id).orElseThrow();
@@ -67,12 +70,14 @@ public class InstructorManager implements InstructorService {
         return new SuccessDataResult<UpdateInstructorResponse>(response, InstructorMessages.InstructorUpdated);
     }
     @Override
+    @Loggable
     public Result delete(int id) {
         Instructor instructor= instructorRepository.getById(id);
         instructorRepository.delete(instructor);
         return new SuccessResult(InstructorMessages.InstructorDeleted);
     }
     @Override
+    @Loggable
     public DataResult<List<GetAllInstructorResponse>> getAll() {
         List<Instructor> instructors = instructorRepository.findAll();
         List<GetAllInstructorResponse> userResponses = instructors.stream().map(instructor -> modelMapperService.forResponse().map(instructor, GetAllInstructorResponse.class)).collect(Collectors.toList());

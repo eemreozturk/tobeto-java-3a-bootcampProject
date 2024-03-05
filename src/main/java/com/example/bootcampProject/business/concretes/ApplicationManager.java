@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.application.CreateA
 import com.example.bootcampProject.business.responses.update.application.UpdateApplicationResponse;
 import com.example.bootcampProject.business.responses.get.application.GetAllApplicationResponse;
 import com.example.bootcampProject.business.rules.ApplicationBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.utulities.mapping.ModelMapperService;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
@@ -40,6 +41,7 @@ public class ApplicationManager implements ApplicationService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateApplicationResponse> add(CreateApplicationRequest request) {
         applicationBusinessRules.checkIfIdExists(request.getId());
         Application application = modelMapperService.forRequest().map(request, Application.class);
@@ -50,6 +52,7 @@ public class ApplicationManager implements ApplicationService {
     }
 
     @Override
+    @Loggable
     public DataResult<UpdateApplicationResponse> update(UpdateApplicationRequest applicationRequest, int id) {
 
         Application application = applicationRepository.findById(id);
@@ -59,12 +62,14 @@ public class ApplicationManager implements ApplicationService {
         return new SuccessDataResult<UpdateApplicationResponse>(response, ApplicationMessages.ApplicationUpdated);
     }
     @Override
+    @Loggable
     public Result delete(int id) {
         Application application = applicationRepository.getById(id);
        applicationRepository.delete(application);
         return new SuccessResult(ApplicationMessages.ApplicationDeleted);
     }
     @Override
+    @Loggable
     public DataResult<List<GetAllApplicationResponse>> getAll() {
         List<Application> applications = applicationRepository.findAll();
         List<GetAllApplicationResponse> applicationResponses = applications.stream().map(application -> modelMapperService.forResponse().map(application, GetAllApplicationResponse.class)).collect(Collectors.toList());

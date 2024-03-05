@@ -8,6 +8,7 @@ import com.example.bootcampProject.business.responses.create.employee.CreateEmpl
 import com.example.bootcampProject.business.responses.get.employee.GetAllEmployeeResponse;
 import com.example.bootcampProject.business.responses.update.employee.UpdateEmployeeResponse;
 import com.example.bootcampProject.business.rules.EmployeeBusinessRules;
+import com.example.bootcampProject.core.aspects.logging.Loggable;
 import com.example.bootcampProject.core.utulities.paging.PageDto;
 import com.example.bootcampProject.core.utulities.results.DataResult;
 import com.example.bootcampProject.core.utulities.results.Result;
@@ -42,6 +43,7 @@ public class EmployeeManager implements EmployeeService {
     }
 
     @Override
+    @Loggable
     public DataResult<CreateEmployeeResponse> add(CreateEmployeeRequest request) {
         employeeBusinessRules.checkIfPositionExists(request.getPosition());
         LocalDate birthDate= LocalDate.parse(request.getDateOfBirth());
@@ -55,6 +57,7 @@ public class EmployeeManager implements EmployeeService {
     }
 
     @Override
+    @Loggable
     public DataResult<UpdateEmployeeResponse> update(UpdateEmployeeRequest updateEmployeeRequest, int id) {
 
 
@@ -66,12 +69,14 @@ public class EmployeeManager implements EmployeeService {
     }
 
     @Override
+    @Loggable
     public Result delete(int id) {
         Employee employee= employeeRepository.getById(id);
         employeeRepository.delete(employee);
         return new SuccessResult(EmployeeMessages.EmployeeDeleted);
     }
     @Override
+    @Loggable
     public DataResult<List<GetAllEmployeeResponse>> getAll() {
         List<Employee> employies = employeeRepository.findAll();
         List<GetAllEmployeeResponse> userResponses = employies.stream().map(employee -> modelMapperService.forResponse().map(employee, GetAllEmployeeResponse.class)).collect(Collectors.toList());
