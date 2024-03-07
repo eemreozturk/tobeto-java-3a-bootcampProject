@@ -80,3 +80,12 @@ her şey burada da aynı şekilde çalışacak. Container ve Imagelerin tutuldu�
 işinizi daha da kolaylaştıracağından eminim.
 #Farklı İşletim Sistemlerine Destek Vermesi Docker Windows, Linux, MacOs gibi farklı işletim sistemlerine destek verir.
 #Popüler Cloud Servislerle Entegre Edilebilir. Docker , AWS, Microsoft Azure, Ansible, Kubernetes, Istio ve daha fazla tool ve cloud hizmetlerle entegre şekilde çalışabilir.
+
+Spring Security nedir?
+Spring framework kullanılarak geliştirilen doğrulama(Authentication), yetkilendirme(Authorization), şifreleme(Password Encoder) ve CSRF gibi güvenlik önlemleri sağlayan, Spring platformunda yer alan bir projedir.
+
+Kullanım kolaylığı, CSRF, Session Fixation gibi birçok güvenlik önleminin varsayılan olarak aktif gelmesi, farklı doğrulama, yetkilendirme ve şifreleme yöntemlerini desteklemesinden dolayı Spring Security de-facto standart haline gelmiştir.
+
+JWT (JSON Web Tokens) Nedir? 
+JWT(JSON Web Tokens), bir RFC7519 endüstri standartıdır. JWT, kullanıcının doğrulanması, web servis güvenliği, bilgi güvenliği gibi birçok konuda kullanılabilir. JWT oldukça popüler ve tercih edilen bir yöntemdir.
+Web projelerimizi geliştirirken kullanıcı kimliklendirme/yetkilendirme işlemi oldukça önemlidir. Uygulamamızı yetkisiz kişilerden korumak ve yalnızca yetkili kullanıcıların erişimi için çeşitli yöntemler kullanırız. Bu çözümlerden birisi de token kullanmaktır.  
